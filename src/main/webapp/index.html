@@ -1,164 +1,71 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dynamic Todo List</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script type="text/javascript">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+function updateList(items) {
+    $("#my-list").html("");
+    items.forEach(function (e) {
+        $("#my-list").append("<li>" + e + "</li>");
+    });
+}
 
-    <title>SHRS</title>
-  </head>
-  <body>
-    <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-light primary-color">
+function getListItems() {
+    $.ajax({
+        url : 'services/items',
+        dataType : 'json',
+        success : function(r) {
+            updateList(r);
+        }
+    });
+}
 
-    <!-- Navbar brand -->
-    <a class="navbar-brand" href="#">Railway</a>
-  
-    <!-- Collapse button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-      aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="basicExampleNav">
-  
-      <!-- Links -->
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home
-            <span class="sr-only">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-  
-        <!-- Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
-        </li>
-  
-      </ul>
-      <!-- Links -->
-  
-      <form class="form-inline">
-            <div class="text-center">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login
-                        </button>
-            </div>
-      </form>
-      <form class="form-inline">
-            <div class="text-center">
-                    <button style ="margin-left: 20px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">Register
-                        </button>
-            </div>
-      </form>
-                     
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        
-                        <input  type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                    </div>
-                    <div class="input-group mb-3">
-                        
-                        <input type="password" class="form-control" placeholder="Password" aria-label="Username" aria-describedby="basic-addon1">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-              </div>
-            </div>
-          </div>
+function sendListItem() {
+    var listItem = $("#texttosend").val();
+    
+    $.post("services/items", { newEntry: listItem}, function() {
+        getListItems();
+    });
+}
+
+$(document).ready(function () { 
+    getListItems();
+    
+    $("#send-item").on('click', function () {
+        sendListItem();
+    });
+});
+
+</script>
+</head>
+<body>
+<h2>Dynamic Todo List Exercise</h2>
+
+<p style="font-style: italic">
+In this exercise, your task is to expand the functionality of this todo list web application.  
+The changes must be implemented both on the front-end and on the server.  
+</p>
+
+<ul style="font-style: italic">
+<li>Add a button that clears the entire list</li>
+<li>Add a convenient way for the user to delete individual entries (for example, individual buttons or links alongside each entry)</li>
+<li>Add a time stamp that shows when a task was created</li>
+<li>Check and validate input using a reasonable regular expression, don't allow tasks with no content</li>
+</ul>
 
 
-<!--Registration Form!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+Enter your task: <input type="text" id="texttosend"><br>
+<button id="send-item" type="button" >Submit</button>
 
-        <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Registration</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group mb-3">
-                            <input name = "Fname" id="Fname" type="text" class="form-control" placeholder="First Name" aria-label="First Name" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <input name = "Lname"id="Lname"  type="text" class="form-control" placeholder="Last Name" aria-label="Last Name" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <input name = "Username"id="Username"  type="text" class="form-control" placeholder="Username (First and Last names by default)" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                            <input name = "password" id="password" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                                <input name = "email"id="email"  type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
-                            </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <input type="submit" class="btn btn-primary" value="Register" id="submit1" onclick="getReg();"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-    </div>
-    <!-- Collapsible content -->
-  </nav>
+<ul id="my-list"></ul>
 
 
-    <!--/MAIN PART!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-  <form action="./DbServlet" method="post"> 
-	 <div class ="container">
-		 <div class="input-group mb-3">
-		  <input name="Date" type="text" class="form-control" placeholder="Date(YYYY-MM-DD)" aria-label="Date" aria-describedby="basic-addon1">
-		  <input name="Departure" type="text" class="form-control" placeholder="Departure" aria-label="Departure" aria-describedby="basic-addon1">
-		  <input name="Arrival" type="text" class="form-control" placeholder="Arrival" aria-label="Arrival" aria-describedby="basic-addon1">
-			<input type="submit" value="Search"/>
-		</div>
-	</div>
-    </form>
+<p>
+<a href="services/items">Link to List Items API</a>
+</p>
 
-    <!-- Google MAPSSSSSSSSSS -->
-    <script src="https://apps.elfsight.com/p/platform.js" defer></script>
-    <div class="elfsight-app-11b1f8be-08ca-416c-bb72-c46dba79ea6d"></div>
-
-  <!--/.Navbar-->
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="JS/ajax.js" type="text/javascript"></script>
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+</body>
 </html>
